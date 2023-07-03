@@ -14,6 +14,7 @@ const envSchema = z.object({
   COMPLIANCE_API_URL: z.string().default("https://compliance-api.cubos.io"),
   COMPLIANCE_EMAIL: z.string(),
   COMPLIANCE_PASSWORD: z.string(),
+  JWT_SECRET: z.string(),
 })
 
 const _env = envSchema.safeParse(process.env)
