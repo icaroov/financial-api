@@ -30,3 +30,9 @@ export class InvalidDocumentError extends ApiError {
     super(message, 400)
   }
 }
+
+export class UserAlreadyExistsError extends ApiError {
+  constructor(message: string) {
+    super(message, 409)
+  }
+}

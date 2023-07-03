@@ -2,41 +2,13 @@ import axios, { AxiosError, AxiosInstance } from "axios"
 
 import { env } from "@/lib/env"
 import { logger } from "@/lib/logger"
-
-type AuthCodeResponse = {
-  success: boolean
-  data: {
-    userId: string
-    authCode: string
-  }
-}
-
-type AuthTokenResponse = {
-  success: boolean
-  data: {
-    idToken: string
-    accessToken: string
-    refreshToken: string
-  }
-}
-
-type RefreshTokenResponse = {
-  success: boolean
-  data: {
-    accessToken: string
-  }
-}
-
-enum DocumentStatus {
-  VALID = 1,
-  INVALID = 2,
-}
-
-type ValidateDocumentResponse = {
-  document: string
-  status: DocumentStatus
-  reason: string
-}
+import {
+  AuthCodeResponse,
+  AuthTokenResponse,
+  DocumentStatus,
+  RefreshTokenResponse,
+  ValidateDocumentResponse,
+} from "@/types/compliance.type"
 
 export class ComplianceService {
   private url = env.COMPLIANCE_API_URL
@@ -49,7 +21,7 @@ export class ComplianceService {
     this.axiosInstance = axios.create()
   }
 
-  async validateDocument(document: string): Promise<boolean> {
+  async validateDocument(document: string): Promise<DocumentStatus> {
     if (!this.accessToken) {
       await this.refreshAccessToken()
     }
@@ -64,19 +36,7 @@ export class ComplianceService {
         }
       )
 
-      if (response.data.status === DocumentStatus.INVALID) {
-        logger.error(
-          `Compliance service returned invalid ${documentType.toUpperCase()}: ${document}.`
-        )
-
-        return false
-      }
-
-      logger.info(
-        `Compliance service returned valid ${documentType.toUpperCase()}: ${document}.`
-      )
-
-      return true
+      return response.data.status
     } catch (error) {
       // If the request fails with an unauthorized error, try refreshing the access token
       if (
@@ -89,15 +49,7 @@ export class ComplianceService {
         return this.validateDocument(document)
       }
 
-      if (error instanceof Error) {
-        logger.error(
-          `Error while trying to validate document: ${document} with compliance service.`
-        )
-
-        logger.error(error.message)
-      }
-
-      throw new Error("Error while trying to validate document.")
+      throw error
     }
   }
 

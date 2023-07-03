@@ -1,8 +1,12 @@
 import bcrypt from "bcryptjs"
 
 import { IUsersRepository } from "@/repositories/users.repository"
-import { BadRequestError, InvalidDocumentError } from "@/helpers/errors.helper"
+import { DocumentStatus } from "@/types/compliance.type"
 import { logger } from "@/lib/logger"
+import {
+  InvalidDocumentError,
+  UserAlreadyExistsError,
+} from "@/helpers/errors.helper"
 
 import { ComplianceService } from "./compliance.service"
 
@@ -24,7 +28,7 @@ export class RegisterService {
 
     if (userAlreadyExists) {
       logger.error(`User with document: ${document} already exists.`)
-      throw new BadRequestError("User already exists.")
+      throw new UserAlreadyExistsError("User already exists.")
     }
 
     const complianceService = new ComplianceService()
@@ -32,9 +36,12 @@ export class RegisterService {
       formattedDocument
     )
 
-    if (!isDocumentValid) {
-      throw new InvalidDocumentError("Invalid document")
+    if (isDocumentValid === DocumentStatus.INVALID) {
+      logger.error(`Invalid document: ${document}.`)
+      throw new InvalidDocumentError("Invalid document.")
     }
+
+    logger.info(`Validated document: ${document} successfully.`)
 
     const passwordHash = await bcrypt.hash(password, 6)
 
