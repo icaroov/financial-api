@@ -6,5 +6,5 @@ import { logger } from "@/lib/logger"
 const PORT = env.PORT
 
 app.listen(PORT, () =>
-  logger.info(`Server is running at http://localhost:${PORT}`)
+  logger.info(`Server is running at http://localhost:${PORT}.`)
 )
