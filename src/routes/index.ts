@@ -1,9 +1,9 @@
 import { Router } from "express"
 
-import { register } from "@/controllers/register.controller"
+import { RegisterController } from "@/controllers/register.controller"
 
 const routes = Router()
 
-routes.post("/people", register)
+routes.post("/people", new RegisterController().create)
 
 export { routes }
