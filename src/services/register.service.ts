@@ -2,6 +2,8 @@ import bcrypt from "bcryptjs"
 
 import { IUsersRepository } from "@/repositories/users.repository"
 import { IComplianceRepository } from "@/repositories/compliance.repository"
+import { User } from "@prisma/client"
+
 import { DocumentStatus } from "@/types/compliance.type"
 import { logger } from "@/lib/logger"
 import {
@@ -9,10 +11,14 @@ import {
   UserAlreadyExistsError,
 } from "@/helpers/errors.helper"
 
-interface IRegisterService {
+interface IRegisterServiceRequest {
   name: string
   document: string
   password: string
+}
+
+interface IRegisterServiceResponse {
+  user: User
 }
 
 export class RegisterService {
@@ -21,7 +27,11 @@ export class RegisterService {
     private complianceService: IComplianceRepository
   ) {}
 
-  async handle({ name, document, password }: IRegisterService) {
+  async handle({
+    name,
+    document,
+    password,
+  }: IRegisterServiceRequest): Promise<IRegisterServiceResponse> {
     const formattedDocument = document.replace(/\.|-|\//g, "")
 
     const userAlreadyExists = await this.usersRepository.findByDocument(

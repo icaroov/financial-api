@@ -3,7 +3,13 @@ import { ZodError } from "zod"
 
 import { RegisterController } from "@/controllers/register.controller"
 
+let registerController: RegisterController
+
 describe("RegisterController", () => {
+  beforeEach(() => {
+    registerController = new RegisterController()
+  })
+
   const res = {
     status: jest.fn().mockReturnThis(),
     json: jest.fn().mockReturnThis(),
@@ -18,7 +24,6 @@ describe("RegisterController", () => {
       },
     } as Request
 
-    const registerController = new RegisterController()
     const handler = registerController.create(req, res)
 
     await expect(() => handler).rejects.toBeInstanceOf(ZodError)
@@ -36,7 +41,6 @@ describe("RegisterController", () => {
       },
     } as Request
 
-    const registerController = new RegisterController()
     const handler = registerController.create(req, res)
 
     await expect(() => handler).rejects.toBeInstanceOf(ZodError)
@@ -54,7 +58,6 @@ describe("RegisterController", () => {
       },
     } as Request
 
-    const registerController = new RegisterController()
     const handler = registerController.create(req, res)
 
     await expect(() => handler).rejects.toBeInstanceOf(ZodError)
@@ -72,7 +75,6 @@ describe("RegisterController", () => {
       },
     } as Request
 
-    const registerController = new RegisterController()
     const handler = registerController.create(req, res)
 
     await expect(() => handler).rejects.toBeInstanceOf(ZodError)

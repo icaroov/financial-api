@@ -4,9 +4,14 @@ import { InMemoryUsersRepository } from "@/repositories/inMemory/inMemoryUsers.r
 import { RegisterService } from "@/services/register.service"
 import { DocumentStatus } from "@/types/compliance.type"
 
+let usersRepository: InMemoryUsersRepository
+
 describe("RegisterService", () => {
+  beforeEach(() => {
+    usersRepository = new InMemoryUsersRepository()
+  })
+
   it("should hash the password correctly", async () => {
-    const usersRepository = new InMemoryUsersRepository()
     const complianceServiceMocked = {
       validateDocument: jest.fn().mockResolvedValue(DocumentStatus.VALID),
     }
@@ -28,7 +33,6 @@ describe("RegisterService", () => {
   })
 
   it("should throw an error if the document is invalid", async () => {
-    const usersRepository = new InMemoryUsersRepository()
     const complianceServiceMocked = {
       validateDocument: jest.fn().mockResolvedValue(DocumentStatus.INVALID),
     }
@@ -52,7 +56,6 @@ describe("RegisterService", () => {
   })
 
   it("should throw an error if the user already exists", async () => {
-    const usersRepository = new InMemoryUsersRepository()
     const complianceServiceMocked = {
       validateDocument: jest.fn().mockResolvedValue(DocumentStatus.VALID),
     }
@@ -78,7 +81,6 @@ describe("RegisterService", () => {
   })
 
   it("should create a new user", async () => {
-    const usersRepository = new InMemoryUsersRepository()
     const complianceServiceMocked = {
       validateDocument: jest.fn().mockResolvedValue(DocumentStatus.VALID),
     }

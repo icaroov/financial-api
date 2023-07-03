@@ -1,10 +1,8 @@
 import { Request, Response } from "express"
 import { z } from "zod"
 
-import { PrismaUsersRepository } from "@/repositories/prisma/prismaUsers.repository"
+import { buildRegisterService } from "@/services/factories/buildRegisterService"
 import { cnpjRegex, cpfRegex } from "@/helpers/validateDocument.helper"
-import { RegisterService } from "@/services/register.service"
-import { ComplianceService } from "@/services/compliance.service"
 import { logger } from "@/lib/logger"
 
 export class RegisterController {
@@ -22,13 +20,7 @@ export class RegisterController {
 
     const { name, document, password } = registerBodySchema.parse(req.body)
 
-    const usersRepository = new PrismaUsersRepository()
-    const complianceService = new ComplianceService()
-
-    const registerService = new RegisterService(
-      usersRepository,
-      complianceService
-    )
+    const registerService = buildRegisterService()
 
     await registerService.handle({ name, document, password })
 
