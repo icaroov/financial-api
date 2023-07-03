@@ -1,14 +1,13 @@
 import bcrypt from "bcryptjs"
 
 import { IUsersRepository } from "@/repositories/users.repository"
+import { IComplianceRepository } from "@/repositories/compliance.repository"
 import { DocumentStatus } from "@/types/compliance.type"
 import { logger } from "@/lib/logger"
 import {
   InvalidDocumentError,
   UserAlreadyExistsError,
 } from "@/helpers/errors.helper"
-
-import { ComplianceService } from "./compliance.service"
 
 interface IRegisterService {
   name: string
@@ -17,7 +16,10 @@ interface IRegisterService {
 }
 
 export class RegisterService {
-  constructor(private usersRepository: IUsersRepository) {}
+  constructor(
+    private usersRepository: IUsersRepository,
+    private complianceService: IComplianceRepository
+  ) {}
 
   async handle({ name, document, password }: IRegisterService) {
     const formattedDocument = document.replace(/\.|-|\//g, "")
@@ -31,8 +33,7 @@ export class RegisterService {
       throw new UserAlreadyExistsError("User already exists.")
     }
 
-    const complianceService = new ComplianceService()
-    const isDocumentValid = await complianceService.validateDocument(
+    const isDocumentValid = await this.complianceService.validateDocument(
       formattedDocument
     )
 
@@ -45,10 +46,14 @@ export class RegisterService {
 
     const passwordHash = await bcrypt.hash(password, 6)
 
-    await this.usersRepository.create({
+    const user = await this.usersRepository.create({
       name,
       document: formattedDocument,
       password: passwordHash,
     })
+
+    return {
+      user,
+    }
   }
 }

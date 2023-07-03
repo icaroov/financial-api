@@ -4,6 +4,7 @@ import { z } from "zod"
 import { PrismaUsersRepository } from "@/repositories/prisma/prismaUsers.repository"
 import { cnpjRegex, cpfRegex } from "@/helpers/validateDocument.helper"
 import { RegisterService } from "@/services/register.service"
+import { ComplianceService } from "@/services/compliance.service"
 import { logger } from "@/lib/logger"
 
 export async function register(req: Request, res: Response) {
@@ -19,8 +20,14 @@ export async function register(req: Request, res: Response) {
   })
 
   const { name, document, password } = registerBodySchema.parse(req.body)
+
   const usersRepository = new PrismaUsersRepository()
-  const registerService = new RegisterService(usersRepository)
+  const complianceService = new ComplianceService()
+
+  const registerService = new RegisterService(
+    usersRepository,
+    complianceService
+  )
 
   await registerService.handle({ name, document, password })
 

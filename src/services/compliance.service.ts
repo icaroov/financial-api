@@ -2,6 +2,7 @@ import axios, { AxiosError, AxiosInstance } from "axios"
 
 import { env } from "@/lib/env"
 import { logger } from "@/lib/logger"
+import { IComplianceRepository } from "@/repositories/compliance.repository"
 import {
   AuthCodeResponse,
   AuthTokenResponse,
@@ -10,7 +11,7 @@ import {
   ValidateDocumentResponse,
 } from "@/types/compliance.type"
 
-export class ComplianceService {
+export class ComplianceService implements IComplianceRepository {
   private url = env.COMPLIANCE_API_URL
   private accessToken: string | undefined
   private refreshToken: string | undefined
