@@ -16,11 +16,12 @@ export const errorMiddleware = (
   _next: NextFunction
 ) => {
   if (error instanceof ZodError) {
-    logger.error("Validation error.")
+    logger.error("Validation form error.")
 
-    return res
-      .status(400)
-      .json({ message: "Validation error.", errors: error.format() })
+    return res.status(400).json({
+      message: "Validation error.",
+      errors: error.flatten().fieldErrors,
+    })
   }
 
   if (error instanceof UserAlreadyExistsError) {
