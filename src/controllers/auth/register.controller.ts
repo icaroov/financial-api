@@ -1,12 +1,12 @@
 import { Request, Response } from "express"
 import { z } from "zod"
 
-import { buildRegisterService } from "@/services/factories/buildRegisterService"
+import { buildRegisterService } from "@/factories/buildRegisterService"
 import { cnpjRegex, cpfRegex } from "@/helpers/validateDocument.helper"
 import { logger } from "@/lib/logger"
 
 export class RegisterController {
-  async create(req: Request, res: Response) {
+  async register(req: Request, res: Response) {
     const registerBodySchema = z.object({
       name: z.string().min(3).max(255),
       document: z

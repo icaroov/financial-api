@@ -1,7 +1,7 @@
 import { Request, Response } from "express"
 import { ZodError } from "zod"
 
-import { RegisterController } from "@/controllers/register.controller"
+import { RegisterController } from "@/controllers/auth/register.controller"
 
 let registerController: RegisterController
 
@@ -24,7 +24,7 @@ describe("RegisterController", () => {
       },
     } as Request
 
-    const handler = registerController.create(req, res)
+    const handler = registerController.register(req, res)
 
     await expect(() => handler).rejects.toBeInstanceOf(ZodError)
     expect(() => handler).rejects.toThrow(
@@ -41,7 +41,7 @@ describe("RegisterController", () => {
       },
     } as Request
 
-    const handler = registerController.create(req, res)
+    const handler = registerController.register(req, res)
 
     await expect(() => handler).rejects.toBeInstanceOf(ZodError)
     expect(() => handler).rejects.toThrow(
@@ -58,7 +58,7 @@ describe("RegisterController", () => {
       },
     } as Request
 
-    const handler = registerController.create(req, res)
+    const handler = registerController.register(req, res)
 
     await expect(() => handler).rejects.toBeInstanceOf(ZodError)
     expect(() => handler).rejects.toThrow(
@@ -75,7 +75,7 @@ describe("RegisterController", () => {
       },
     } as Request
 
-    const handler = registerController.create(req, res)
+    const handler = registerController.register(req, res)
 
     await expect(() => handler).rejects.toBeInstanceOf(ZodError)
     expect(() => handler).rejects.toThrow(

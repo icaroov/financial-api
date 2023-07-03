@@ -1,7 +1,7 @@
 import bcrypt from "bcryptjs"
 
 import { InMemoryUsersRepository } from "@/repositories/inMemory/inMemoryUsers.repository"
-import { RegisterService } from "@/services/register.service"
+import { RegisterService } from "@/services/auth/register.service"
 import { DocumentStatus } from "@/types/compliance.type"
 
 let usersRepository: InMemoryUsersRepository
