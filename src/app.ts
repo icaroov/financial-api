@@ -1,10 +1,13 @@
-import express, { NextFunction, Response, Request } from "express"
+import express, { Request, Response, NextFunction } from "express"
 
-import { logger } from "@/lib/logger"
+import { routes } from "@/routes"
+
+import { logger } from "./lib/logger"
 
 const app = express()
 
 app.use(express.json())
+app.use(routes)
 
 app.use(
   (err: Error, _request: Request, response: Response, _next: NextFunction) => {
