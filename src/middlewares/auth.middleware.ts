@@ -18,6 +18,10 @@ export const authMiddleware = async (
 
   const token = authorization.split(" ")[1]
 
+  if (!token) {
+    throw new UnauthorizedError("Unauthorized.")
+  }
+
   const { id } = jwt.verify(token, env.JWT_SECRET) as { id: string }
 
   const usersRepository = new PrismaUsersRepository()
