@@ -7,7 +7,4 @@ export interface IAccountsRepository {
   findAccountById: (
     accountId: string
   ) => Promise<(Account & { cards: Card[] }) | null>
-
-  createCard: (data: Prisma.CardCreateInput) => Promise<Card>
-  findCardsByAccountId: (accountId: string) => Promise<Card[]>
 }

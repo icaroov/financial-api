@@ -6,6 +6,7 @@ import {
   ResourceAlreadyExistsError,
   ResourceNotFoundError,
 } from "@/helpers/errors.helper"
+import { ICardsRepository } from "@/repositories/cards.repository"
 
 interface CreateCardForAccountServiceRequest {
   cvv: string
@@ -19,7 +20,10 @@ interface CreateCardForAccountServiceResponse {
 }
 
 export class CreateCardForAccountService {
-  constructor(private accountsRepository: IAccountsRepository) {}
+  constructor(
+    private cardsRepository: ICardsRepository,
+    private accountsRepository: IAccountsRepository
+  ) {}
 
   async handle({
     cvv,
@@ -36,7 +40,7 @@ export class CreateCardForAccountService {
       throw new ResourceNotFoundError("Account not found.")
     }
 
-    const cards = await this.accountsRepository.findCardsByAccountId(accountId)
+    const cards = await this.cardsRepository.findCardsByAccountId(accountId)
     const cardAlreadyExists = cards.find(card => card.number === cardNumber)
 
     if (cardAlreadyExists) {
@@ -44,7 +48,7 @@ export class CreateCardForAccountService {
       throw new ResourceAlreadyExistsError("Card already exists in account.")
     }
 
-    const card = await this.accountsRepository.createCard({
+    const card = await this.cardsRepository.createCard({
       type,
       number: cardNumber,
       cvv,

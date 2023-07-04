@@ -7,8 +7,8 @@ import { LoginController } from "@/controllers/auth/login.controller"
 
 import { CreateAccountController } from "@/controllers/account/createAccount.controller"
 import { ListAccountsController } from "@/controllers/account/listAccounts.controller"
-import { CreateCardForAccountController } from "@/controllers/account/createCardForAccount.controller"
-import { ListCardsByAccountController } from "@/controllers/account/listCardsByAccount.controller"
+import { CreateCardForAccountController } from "@/controllers/card/createCardForAccount.controller"
+import { ListCardsByAccountController } from "@/controllers/card/listCardsByAccount.controller"
 
 const routes = Router()
 

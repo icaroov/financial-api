@@ -2,18 +2,23 @@ import { createAccount } from "@/mocks/createAccount"
 import { createUser } from "@/mocks/createUser"
 
 import { InMemoryAccountsRepository } from "@/repositories/inMemory/inMemoryAccounts.repository"
+import { InMemoryCardsRepository } from "@/repositories/inMemory/inMemoryCards.repository"
 import { InMemoryUsersRepository } from "@/repositories/inMemory/inMemoryUsers.repository"
-import { CreateCardForAccountService } from "@/services/account/createCardForAccount.service"
+import { CreateCardForAccountService } from "@/services/card/createCardForAccount.service"
 
 let accountsRepository: InMemoryAccountsRepository
 let usersRepository: InMemoryUsersRepository
+let cardsRepository: InMemoryCardsRepository
 let createCardForAccountService: CreateCardForAccountService
 
 describe("ListCardsByAccountService", () => {
   beforeEach(() => {
     usersRepository = new InMemoryUsersRepository()
     accountsRepository = new InMemoryAccountsRepository()
+    cardsRepository = new InMemoryCardsRepository()
+
     createCardForAccountService = new CreateCardForAccountService(
+      cardsRepository,
       accountsRepository
     )
   })
@@ -29,7 +34,7 @@ describe("ListCardsByAccountService", () => {
       type: "physical",
     })
 
-    const cards = await accountsRepository.findCardsByAccountId(account.id)
+    const cards = await cardsRepository.findCardsByAccountId(account.id)
 
     expect(cards).toHaveLength(1)
   })

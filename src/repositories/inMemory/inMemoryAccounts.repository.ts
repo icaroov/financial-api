@@ -1,10 +1,10 @@
-import { Account, Card, Prisma } from "@prisma/client"
+import { Account, Prisma } from "@prisma/client"
 
 import { IAccountsRepository } from "@/repositories/accounts.repository"
+import { InMemoryCardsRepository } from "./inMemoryCards.repository"
 
 export class InMemoryAccountsRepository implements IAccountsRepository {
   public accounts: Account[] = []
-  public cards: Card[] = []
 
   async create(data: Prisma.AccountCreateInput) {
     const formattedAccountNumber = data.account.replace("-", "")
@@ -25,13 +25,15 @@ export class InMemoryAccountsRepository implements IAccountsRepository {
   }
 
   async findAccountById(accountId: string) {
+    const cards = new InMemoryCardsRepository().cards
+
     const account = this.accounts.find(account => account.id === accountId)
 
     if (!account) return null
 
     return {
       ...account,
-      cards: this.cards.filter(card => card.accountId === account.id),
+      cards: cards.filter(card => card.accountId === account.id),
     }
   }
 
@@ -47,27 +49,5 @@ export class InMemoryAccountsRepository implements IAccountsRepository {
 
   async findAllAccounts() {
     return this.accounts
-  }
-
-  async createCard(data: Prisma.CardCreateInput) {
-    const card: Card = {
-      id: String(this.accounts.length + 1),
-      type: data.type,
-      cvv: data.cvv,
-      number: data.number,
-      accountId: data.account.connect?.id ?? "",
-      createdAt: new Date(),
-      updatedAt: new Date(),
-    }
-
-    this.cards.push(card)
-
-    return card
-  }
-
-  async findCardsByAccountId(accountId: string) {
-    const cards = this.cards.filter(card => card.accountId === accountId)
-
-    return cards
   }
 }
