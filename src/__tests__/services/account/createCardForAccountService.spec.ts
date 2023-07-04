@@ -4,7 +4,10 @@ import { createAccount } from "@/mocks/createAccount"
 import { InMemoryAccountsRepository } from "@/repositories/inMemory/inMemoryAccounts.repository"
 import { InMemoryUsersRepository } from "@/repositories/inMemory/inMemoryUsers.repository"
 import { CreateCardForAccountService } from "@/services/account/createCardForAccount.service"
-import { ResourceNotFoundError } from "@/helpers/errors.helper"
+import {
+  ResourceAlreadyExistsError,
+  ResourceNotFoundError,
+} from "@/helpers/errors.helper"
 
 let usersRepository: InMemoryUsersRepository
 let accountsRepository: InMemoryAccountsRepository
@@ -47,5 +50,31 @@ describe("CreateCardForAccountService", () => {
 
     await expect(() => handler).rejects.toThrow("Account not found.")
     await expect(() => handler).rejects.toBeInstanceOf(ResourceNotFoundError)
+  })
+
+  it("should not create a card already exists in specified account", async () => {
+    const user = await createUser(usersRepository)
+    const account = await createAccount(accountsRepository, user.id)
+
+    const { card } = await createCardForAccountService.handle({
+      cvv: "123",
+      type: "virtual",
+      number: "1234567890123456",
+      accountId: account.id,
+    })
+
+    const handler = createCardForAccountService.handle({
+      cvv: "123",
+      type: "virtual",
+      number: card.number,
+      accountId: account.id,
+    })
+
+    await expect(() => handler).rejects.toThrow(
+      "Card already exists in account."
+    )
+    await expect(() => handler).rejects.toBeInstanceOf(
+      ResourceAlreadyExistsError
+    )
   })
 })

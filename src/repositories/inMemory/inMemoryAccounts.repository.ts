@@ -60,6 +60,8 @@ export class InMemoryAccountsRepository implements IAccountsRepository {
       updatedAt: new Date(),
     }
 
+    this.cards.push(card)
+
     return card
   }
 
