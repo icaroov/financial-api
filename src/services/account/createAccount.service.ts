@@ -1,5 +1,4 @@
-import { Request } from "express"
-import { Account } from "@prisma/client"
+import { Account, User } from "@prisma/client"
 
 import { logger } from "@/lib/logger"
 import { IAccountsRepository } from "@/repositories/accounts.repository"
@@ -12,7 +11,7 @@ import {
 interface CreateAccountServiceRequest {
   branch: string
   account: string
-  request: Request
+  userId: User["id"]
 }
 
 interface CreateAccountServiceResponse {
@@ -28,20 +27,19 @@ export class CreateAccountService {
   async handle({
     account,
     branch,
-    request,
+    userId,
   }: CreateAccountServiceRequest): Promise<CreateAccountServiceResponse> {
     const formattedAccountNumber = account.replace("-", "")
 
-    const accountAlreadyExists = await this.accountsRepository.findById(
-      formattedAccountNumber
-    )
+    const accountAlreadyExists =
+      await this.accountsRepository.findByAccountNumber(formattedAccountNumber)
 
     if (accountAlreadyExists) {
       logger.error("Account already exists.")
       throw new ResourceAlreadyExistsError("Account already exists.")
     }
 
-    const user = await this.usersRepository.findById(request.user.id ?? "")
+    const user = await this.usersRepository.findById(userId)
 
     if (!user) {
       logger.error("User not found.")

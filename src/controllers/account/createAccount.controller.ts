@@ -21,7 +21,7 @@ export class CreateAccountController {
     const { account } = await createAccountService.handle({
       account: accountNumber,
       branch,
-      request: req,
+      userId: req.user.id ?? "",
     })
 
     logger.info("Account created successfully.")

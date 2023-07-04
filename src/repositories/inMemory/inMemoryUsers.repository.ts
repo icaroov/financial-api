@@ -6,10 +6,12 @@ export class InMemoryUsersRepository implements IUsersRepository {
   public users: User[] = []
 
   async create(data: Prisma.UserCreateInput) {
+    const formattedDocument = data.document.replace(/\.|-|\//g, "")
+
     const user: User = {
       id: String(this.users.length + 1),
       name: data.name,
-      document: data.document,
+      document: formattedDocument,
       password: data.password,
       createdAt: new Date(),
       updatedAt: new Date(),

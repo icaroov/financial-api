@@ -26,6 +26,7 @@ describe("AuthService", () => {
     })
 
     expect(token).toBeTruthy()
+    expect(typeof token).toBe("string")
   })
 
   it("should not be able to authenticate a user with invalid document", async () => {
