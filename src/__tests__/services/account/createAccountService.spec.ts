@@ -1,4 +1,4 @@
-import bcrypt from "bcryptjs"
+import { createUser } from "@/mocks/createUser"
 
 import { InMemoryAccountsRepository } from "@/repositories/inMemory/inMemoryAccounts.repository"
 import { InMemoryUsersRepository } from "@/repositories/inMemory/inMemoryUsers.repository"
@@ -6,24 +6,20 @@ import { CreateAccountService } from "@/services/account/createAccount.service"
 
 let usersRepository: InMemoryUsersRepository
 let accountsRepository: InMemoryAccountsRepository
+let createAccountService: CreateAccountService
 
 describe("CreateAccountService", () => {
   beforeEach(() => {
     usersRepository = new InMemoryUsersRepository()
     accountsRepository = new InMemoryAccountsRepository()
-  })
-
-  it("should create an account", async () => {
-    const createAccountService = new CreateAccountService(
+    createAccountService = new CreateAccountService(
       accountsRepository,
       usersRepository
     )
+  })
 
-    const user = await usersRepository.create({
-      name: "John Doe",
-      document: "12345678900",
-      password: await bcrypt.hash("123456", 6),
-    })
+  it("should create an account", async () => {
+    const user = await createUser(usersRepository)
 
     const { account } = await createAccountService.handle({
       branch: "001",
@@ -38,11 +34,6 @@ describe("CreateAccountService", () => {
   })
 
   it("should not create an account if user does not exist", async () => {
-    const createAccountService = new CreateAccountService(
-      accountsRepository,
-      usersRepository
-    )
-
     const handler = createAccountService.handle({
       branch: "001",
       account: "2033392-5",
@@ -53,16 +44,7 @@ describe("CreateAccountService", () => {
   })
 
   it("should format account number", async () => {
-    const createAccountService = new CreateAccountService(
-      accountsRepository,
-      usersRepository
-    )
-
-    const user = await usersRepository.create({
-      name: "John Doe",
-      document: "12345678900",
-      password: await bcrypt.hash("123456", 6),
-    })
+    const user = await createUser(usersRepository)
 
     const { account } = await createAccountService.handle({
       branch: "001",
@@ -74,16 +56,7 @@ describe("CreateAccountService", () => {
   })
 
   it("should not create an account if account already exists", async () => {
-    const createAccountService = new CreateAccountService(
-      accountsRepository,
-      usersRepository
-    )
-
-    const user = await usersRepository.create({
-      name: "John Doe",
-      document: "12345678900",
-      password: await bcrypt.hash("123456", 6),
-    })
+    const user = await createUser(usersRepository)
 
     await accountsRepository.create({
       branch: "001",

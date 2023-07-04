@@ -36,12 +36,12 @@ export class CreateCardForAccountService {
       throw new ResourceNotFoundError("Account not found.")
     }
 
-    const cardAlreadyExists =
-      await this.accountsRepository.findCardsByAccountId(accountId)
+    const cards = await this.accountsRepository.findCardsByAccountId(accountId)
+    const cardAlreadyExists = cards.find(card => card.number === cardNumber)
 
-    if (cardAlreadyExists.length > 0) {
+    if (cardAlreadyExists) {
       logger.error(`Card already exists for account ${accountId}.`)
-      throw new ResourceAlreadyExistsError("Card already exists.")
+      throw new ResourceAlreadyExistsError("Card already exists in account.")
     }
 
     const card = await this.accountsRepository.createCard({

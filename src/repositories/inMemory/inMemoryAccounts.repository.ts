@@ -29,10 +29,13 @@ export class InMemoryAccountsRepository implements IAccountsRepository {
 
     if (!account) return null
 
-    return account
+    return {
+      ...account,
+      cards: this.cards.filter(card => card.accountId === account.id),
+    }
   }
 
-  async findByAccountNumber(accountNumber: string) {
+  async findAccountByNumber(accountNumber: string) {
     const account = this.accounts.find(
       account => account.account === accountNumber
     )

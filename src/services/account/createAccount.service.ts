@@ -32,7 +32,7 @@ export class CreateAccountService {
     const formattedAccountNumber = account.replace("-", "")
 
     const accountAlreadyExists =
-      await this.accountsRepository.findByAccountNumber(formattedAccountNumber)
+      await this.accountsRepository.findAccountByNumber(formattedAccountNumber)
 
     if (accountAlreadyExists) {
       logger.error("Account already exists.")

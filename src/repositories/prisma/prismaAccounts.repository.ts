@@ -19,12 +19,13 @@ export class PrismaAccountsRepository implements IAccountsRepository {
   async findAccountById(accountId: string) {
     const account = await prisma.account.findUnique({
       where: { id: accountId },
+      include: { cards: true },
     })
 
     return account
   }
 
-  async findByAccountNumber(accountNumber: string) {
+  async findAccountByNumber(accountNumber: string) {
     const account = await prisma.account.findUnique({
       where: { account: accountNumber },
     })
