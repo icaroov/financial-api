@@ -42,3 +42,15 @@ export class InvalidCredentialsError extends ApiError {
     super(message, 401)
   }
 }
+
+export class ResourceNotFoundError extends ApiError {
+  constructor(message: string) {
+    super(message, 404)
+  }
+}
+
+export class ResourceAlreadyExistsError extends ApiError {
+  constructor(message: string) {
+    super(message, 409)
+  }
+}

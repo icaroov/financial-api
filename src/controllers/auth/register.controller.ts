@@ -2,7 +2,7 @@ import { Request, Response } from "express"
 import { z } from "zod"
 
 import { buildRegisterService } from "@/factories/buildRegisterService"
-import { cnpjRegex, cpfRegex } from "@/helpers/validateDocument.helper"
+import { cnpjRegex, cpfRegex } from "@/helpers/validateFields"
 import { logger } from "@/lib/logger"
 
 export class RegisterController {
