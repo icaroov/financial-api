@@ -36,8 +36,8 @@ model Account {
 }
 
 enum CardType {
-  PHYSICAL
-  VIRTUAL
+  physical
+  virtual
 }
 
 model Card {
@@ -55,8 +55,8 @@ model Card {
 }
 
 enum TransactionType {
-  DEBIT
-  CREDIT
+  debit
+  credit
 }
 
 model Transaction {
