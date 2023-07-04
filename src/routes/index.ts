@@ -9,6 +9,7 @@ import { CreateAccountController } from "@/controllers/account/createAccount.con
 import { ListAccountsController } from "@/controllers/account/listAccounts.controller"
 import { CreateCardForAccountController } from "@/controllers/card/createCardForAccount.controller"
 import { ListCardsByAccountController } from "@/controllers/card/listCardsByAccount.controller"
+import { ListCardsByUserController } from "@/controllers/card/listCardsByUser.controller"
 
 const routes = Router()
 
@@ -19,6 +20,8 @@ routes.use(authMiddleware)
 
 routes.post("/accounts", new CreateAccountController().create)
 routes.get("/accounts", new ListAccountsController().list)
+
+routes.get("/cards", new ListCardsByUserController().list)
 routes.post(
   "/accounts/:accountId/cards",
   new CreateCardForAccountController().create

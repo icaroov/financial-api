@@ -1,6 +1,7 @@
 import { Card, Prisma } from "@prisma/client"
-import { ICardsRepository } from "@/repositories/cards.repository"
 
+import { createAccount } from "@/mocks/createAccount"
+import { ICardsRepository } from "@/repositories/cards.repository"
 import { InMemoryAccountsRepository } from "./inMemoryAccounts.repository"
 
 export class InMemoryCardsRepository implements ICardsRepository {
@@ -30,6 +31,8 @@ export class InMemoryCardsRepository implements ICardsRepository {
 
   async findCardsByUserId(userId: string) {
     const accountsRepository = new InMemoryAccountsRepository()
+
+    await createAccount(accountsRepository, userId)
 
     const cards = this.cards.filter(card => {
       const account = accountsRepository.accounts.find(
