@@ -7,6 +7,7 @@ import { LoginController } from "@/controllers/auth/login.controller"
 
 import { CreateAccountController } from "@/controllers/account/createAccount.controller"
 import { ListAccountsController } from "@/controllers/account/listAccounts.controller"
+import { CreateCardForAccountController } from "@/controllers/account/createCardForAccount.controller"
 
 const routes = Router()
 
@@ -17,5 +18,9 @@ routes.use(authMiddleware)
 
 routes.post("/accounts", new CreateAccountController().create)
 routes.get("/accounts", new ListAccountsController().list)
+routes.post(
+  "/accounts/:accountId/cards",
+  new CreateCardForAccountController().create
+)
 
 export { routes }

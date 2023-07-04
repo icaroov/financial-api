@@ -5,7 +5,7 @@ export class ListAccountsService {
   constructor(private accountsRepository: IAccountsRepository) {}
 
   async handle() {
-    const accounts = await this.accountsRepository.findAll()
+    const accounts = await this.accountsRepository.findAllAccounts()
 
     logger.info("Accounts listed successfully.")
 

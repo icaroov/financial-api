@@ -10,6 +10,20 @@ export class PrismaAccountsRepository implements IAccountsRepository {
     return account
   }
 
+  async createCard(data: Prisma.CardCreateInput) {
+    const card = await prisma.card.create({ data })
+
+    return card
+  }
+
+  async findAccountById(accountId: string) {
+    const account = await prisma.account.findUnique({
+      where: { id: accountId },
+    })
+
+    return account
+  }
+
   async findByAccountNumber(accountNumber: string) {
     const account = await prisma.account.findUnique({
       where: { account: accountNumber },
@@ -18,9 +32,17 @@ export class PrismaAccountsRepository implements IAccountsRepository {
     return account
   }
 
-  async findAll() {
+  async findAllAccounts() {
     const accounts = await prisma.account.findMany()
 
     return accounts
+  }
+
+  async findCardsByAccountId(accountId: string) {
+    const cards = await prisma.card.findMany({
+      where: { accountId },
+    })
+
+    return cards
   }
 }

@@ -31,7 +31,7 @@ describe("ListAccountsService", () => {
       userId: user.id,
     })
 
-    const accounts = await accountsRepository.findAll()
+    const accounts = await accountsRepository.findAllAccounts()
 
     expect(accounts).toHaveLength(1)
   })
