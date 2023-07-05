@@ -58,6 +58,35 @@ export class CreateInternalTransactionService {
       },
     })
 
+    if (type === "debit") {
+      const balance = account.balance - value
+      const receiverBalance = receiverAccount.balance + value
+
+      if (balance < 0) {
+        logger.error(
+          `Account ${accountId} does not have enough balance to make this transaction.`
+        )
+        throw new Error("Account does not have enough balance.")
+      }
+
+      await this.accountsRepository.updateBalance(accountId, balance)
+      await this.accountsRepository.updateBalance(
+        receiverAccountId,
+        receiverBalance
+      )
+    }
+
+    if (type === "credit") {
+      const balance = account.balance + value
+      const receiverBalance = receiverAccount.balance - value
+
+      await this.accountsRepository.updateBalance(accountId, balance)
+      await this.accountsRepository.updateBalance(
+        receiverAccountId,
+        receiverBalance
+      )
+    }
+
     logger.info(`Internal transaction ${transaction.id} created.`)
 
     return { transaction }
