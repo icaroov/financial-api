@@ -50,4 +50,20 @@ export class InMemoryAccountsRepository implements IAccountsRepository {
   async findAllAccounts() {
     return this.accounts
   }
+
+  async getBalanceByAccountId(accountId: string) {
+    const account = this.accounts.find(account => account.id === accountId)
+
+    if (!account) return 0
+
+    return account.balance
+  }
+
+  async updateBalance(accountId: string, newBalance: number) {
+    const account = this.accounts.find(account => account.id === accountId)
+
+    if (!account) return
+
+    account.balance = newBalance
+  }
 }

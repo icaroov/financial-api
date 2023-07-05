@@ -7,4 +7,6 @@ export interface IAccountsRepository {
   findAccountById: (
     accountId: string
   ) => Promise<(Account & { cards: Card[] }) | null>
+  getBalanceByAccountId: (accountId: string) => Promise<number>
+  updateBalance: (accountId: string, newBalance: number) => Promise<void>
 }

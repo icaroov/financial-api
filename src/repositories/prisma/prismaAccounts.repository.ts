@@ -32,4 +32,19 @@ export class PrismaAccountsRepository implements IAccountsRepository {
 
     return accounts
   }
+
+  async getBalanceByAccountId(accountId: string) {
+    const balance = await prisma.account.findUnique({
+      where: { id: accountId },
+    })
+
+    return balance?.balance || 0
+  }
+
+  async updateBalance(accountId: string, newBalance: number) {
+    await prisma.account.update({
+      where: { id: accountId },
+      data: { balance: newBalance },
+    })
+  }
 }
