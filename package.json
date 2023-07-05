@@ -3,6 +3,9 @@
   "version": "1.0.0",
   "description": "Uma API com as principais funcionalidades de uma aplicação financeira",
   "main": "dist/server.js",
+  "engines": {
+    "node": "18"
+  },
   "scripts": {
     "dev": "tsx watch src/server.ts",
     "build": "tsup src --out-dir dist",
