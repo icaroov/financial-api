@@ -21,7 +21,7 @@
 
 ## How to run the project
 
-You can test the API using the following link: [Financial API](https://financial-api-6kb8.onrender.com) or follow the steps below to run the project locally.
+Follow the steps below to run the project locally.
 
 ### Insomnia workspace
 
